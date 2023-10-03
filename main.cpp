@@ -1,30 +1,20 @@
-#include "displaywindow.h"
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
 
-#include <QApplication>
-#include <QLocale>
-#include <QTranslator>
-
-int main(int argc, char *argv[])
+int main(int argc, char* argv[])
 {
-    QApplication a(argc, argv);
-    QPalette pal = a.palette();
-    pal.setColor(QPalette::Window, Qt::white);
-    pal.setColor(QPalette::WindowText, Qt::darkGray);
-    pal.setColor(QPalette::ButtonText, Qt::darkGray);
-    pal.setColor(QPalette::BrightText, Qt::lightGray);
-    a.setPalette(pal);
+    QGuiApplication app(argc, argv);
+    QGuiApplication::setOrganizationName(QString::fromUtf8("Cuperino"));
+    QGuiApplication::setOrganizationDomain(QString::fromUtf8("com.cuperino.lightpanel"));
+    QGuiApplication::setApplicationName(QString::fromUtf8("LightPanel"));
 
-    QTranslator translator;
-    const QStringList uiLanguages = QLocale::system().uiLanguages();
-    for (const QString &locale : uiLanguages) {
-        const QString baseName = "displaytolightpanel_" + QLocale(locale).name();
-        if (translator.load(":/i18n/" + baseName)) {
-            a.installTranslator(&translator);
-            break;
-        }
-    }
+    QQmlApplicationEngine engine;
+    const QUrl url(u"qrc:/DisplayToLightPanel/Main.qml"_qs);
+    QObject::connect(
+        &engine, &QQmlApplicationEngine::objectCreationFailed,
+        &app, []() { QCoreApplication::exit(-1); },
+        Qt::QueuedConnection);
+    engine.load(url);
 
-    DisplayWindow w;
-    w.show();
-    return a.exec();
+    return app.exec();
 }
