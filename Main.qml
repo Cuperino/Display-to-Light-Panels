@@ -30,18 +30,47 @@ Item {
             flags: Qt.WindowFullscreenButtonHint | (windowZ.currentIndex ? (windowZ.currentIndex === 1 ? Qt.WindowStaysOnTopHint : Qt.WindowStaysOnBottomHint) : 0) | (frameless.checked ? Qt.FramelessWindowHint : 0)
             property bool fullscreen: false
             onClosing: {
-                settings.sync();
+                windowSettings.sync();
+                // if (panels.model>1)
+                //     --panels.model;
+            }
+            onScreenChanged: {
+                bindToScreen();
+            }
+            Component.onCompleted: {
+                bindToScreen();
+            }
+            function bindToScreen() {
+                for (let i=0; i<Qt.application.screens.length; i++)
+                    if (screen.name === Qt.application.screens[i].name) {
+                        hue.value = Qt.binding(function() { return screens.itemAt(i).hue})
+                        lightness.value = Qt.binding(function() { return screens.itemAt(i).lightness; })
+                        saturation.value = Qt.binding(function() { return screens.itemAt(i).saturation; })
+                    }
+            }
+            function reset() {
+                root.showAbout = false;
+                lightPanel.width = 640;
+                lightPanel.height = 480;
+                lightPanel.x = (screen.width - lightPanel.width) / 2;
+                lightPanel.y = (screen.height - lightPanel.height) / 2;
+                hue.value = 180;
+                lightness.value = 250;
+                saturation.value = 255;
+                fullScreen.checked = false;
+                frameless.checked = false;
+                windowZ.currentIndex = 0;
+                opacityAnimation.reverse = false;
+                controls.yOffset = 0.86
+                root.showAbout = false;
             }
             Settings {
-                id: settings
-                category: "s" + screen.name + index.toString() + "n"
+                id: windowSettings
+                category: "n" + index.toString()
                 property alias wX: lightPanel.x
                 property alias wY: lightPanel.y
                 property alias wW: lightPanel.width
                 property alias wH: lightPanel.height
-                property alias hue: hue.value
-                property alias lightness: lightness.value
-                property alias saturation: saturation.value
                 property alias fullscreen: fullScreen.checked
                 property alias frameless: frameless.checked
                 property alias z: windowZ.currentIndex
@@ -363,6 +392,27 @@ Item {
                     }
                 }
             }
+        }
+    }
+    Repeater {
+        id: screens
+        model: Qt.application.screens
+        delegate: Item {
+            id: screenMetadata
+            property string name: model.name
+            property int hue: 180
+            property int lightness: 250
+            property int saturation: 255
+            Settings {
+                id: colorSettings
+                category: "s" + screenMetadata.name
+                property alias hue: screenMetadata.hue
+                property alias lightness: screenMetadata.lightness
+                property alias saturation: screenMetadata.saturation
+            }
+        }
+        onItemRemoved: {
+            colorSettings.sync();
         }
     }
 }
