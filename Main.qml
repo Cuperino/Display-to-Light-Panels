@@ -74,7 +74,21 @@ Item {
                         moved = true;
                     }
                 }
-                onClicked: toggle()
+                onClicked: {
+                    if (mouse.button == Qt.RightButton) {
+                        if (timer.running)
+                        {
+                            timer.stop()
+                        }
+                        else {
+                            frameless.checked = !frameless.checked;
+                            timer.restart()
+                        }
+                    }
+                }
+                onDoubleClicked: {
+                    toggle();
+                }
                 function toggle() {
                    if (!opacityAnimation.running && !moved) {
                         if (opacityAnimation.reverse)
@@ -83,6 +97,11 @@ Item {
                             opacityAnimation.reverse = true;
                         opacityAnimation.running = true;
                     }
+                }
+                Timer{
+                    id: clickTimer
+                    interval: 200
+                    onTriggered: singleClick()
                 }
                 OpacityAnimator {
                     id: opacityAnimation
@@ -267,24 +286,27 @@ Item {
                                     CheckBox {
                                         id: frameless
                                         text: qsTr("Frameless")
+                                        Component.onCompleted: {
+                                            if (Qt.platform.os==="linux" && !fullScreen.checked && checked) {
+                                                lightPanel.showFullScreen();
+                                                frameless.checked = false;
+                                                kwinHack.start()
+                                            }
+                                        }
+                                        Timer {
+                                            // Workaround to restore decorations toggle on KDE Kwin
+                                            id: kwinHack
+                                            interval: 0
+                                            onTriggered: {
+                                                lightPanel.showNormal();
+                                                frameless.checked = true;
+                                            }
+                                        }
                                     }
                                     Button {
                                         text: qsTr("Reset")
                                         onClicked: {
-                                            root.showAbout = false;
-                                            lightPanel.width = 640;
-                                            lightPanel.height = 480;
-                                            lightPanel.x = (screen.width - lightPanel.width) / 2;
-                                            lightPanel.y = (screen.height - lightPanel.height) / 2;
-                                            hue.value = 180;
-                                            lightness.value = 250;
-                                            saturation.value = 255;
-                                            fullScreen.checked = false;
-                                            frameless.checked = false;
-                                            windowZ.currentIndex = 0;
-                                            opacityAnimation.reverse = false;
-                                            controls.yOffset = 0.86
-                                            root.showAbout = false;
+                                            lightPanel.reset();
                                         }
                                     }
                                     Button {
@@ -294,10 +316,10 @@ Item {
                                         }
                                     }
                                     Button {
-                                        enabled: panels.model>1
-                                        text: qsTr("Clear")
+                                        text: qsTr("White")
+                                        enabled: lightness.value!=255
                                         onClicked: {
-                                            panels.model = 1;
+                                            lightness.value = 255
                                         }
                                     }
                                 }
@@ -312,10 +334,13 @@ Item {
                                         }
                                     }
                                     Button {
-                                        text: qsTr("White")
-                                        enabled: lightness.value!=255
+                                        enabled: panels.model>1
+                                        text: qsTr("Clear")
                                         onClicked: {
-                                            lightness.value = 255
+                                            const n = panels.model;
+                                            for (let i=0; i<n; i++)
+                                                panels.objectAt(i).reset();
+                                            panels.model = 1;
                                         }
                                     }
                                     ComboBox {
@@ -327,7 +352,7 @@ Item {
                                         Layout.fillWidth: true
                                     }
                                     Button {
-                                        text: "💡"
+                                        text: "💡" // Lightbulb emoji
                                         onClicked: {
                                             showHideControls.toggle();
                                         }
