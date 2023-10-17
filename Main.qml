@@ -6,6 +6,7 @@ import QtQuick.Controls
 import QtQuick.Layouts
 import QtQml.Models
 import QtCore
+import QtQuick.Controls.Universal
 
 Item {
     id: root
@@ -142,6 +143,9 @@ Item {
                                 fill: parent
                                 margins: 5
                             }
+                            Universal.foreground: lightness.value < 64 ? "#FFF" : "#000"
+                            Universal.background: lightness.value < 64 ? Universal.Steel : "#FFF"
+                            Universal.accent: lightness.value < 64 ? Universal.Steel : Universal.Cobalt
                             ColumnLayout {
                                 id: columnLayout
                                 anchors.fill: parent
