@@ -12,13 +12,18 @@ import DisplayToLightPanel
 Item {
     id: root
     property bool showAbout: false
+    property int panelCount: 1
     Settings {
         category: "panels"
-        property alias windowCount: panels.model
+        property alias panelCount: root.panelCount
     }
     Instantiator {
         id: panels
-        model: 1
+        model: ListModel {}
+        Component.onCompleted: {
+            for (let i=0; i<root.panelCount; i++)
+                model.insert(0, {});
+        }
         delegate: Window {
             id: lightPanel
             width: 640
@@ -32,8 +37,6 @@ Item {
             property bool fullscreen: false
             onClosing: {
                 windowSettings.sync();
-                // if (panels.model>1)
-                //     --panels.model;
             }
             onScreenChanged: {
                 bindToScreen();
@@ -41,7 +44,7 @@ Item {
             Component.onCompleted: {
                 bindToScreen();
                 if (!opacityAnimation.visible)
-                    textAnimationDelay.trigger();
+                    textAnimation.trigger();
             }
             function bindToScreen() {
                 screenModel.screenName = screen.name
@@ -397,17 +400,16 @@ Item {
                                         visible: Qt.platform.os!=="android" && Qt.platform.os!=="ios"
                                         text: qsTr("Add Window")
                                         onClicked: {
-                                            ++panels.model;
+                                            panels.model.insert(panels.model.count, {});
+                                            root.panelCount++;
                                         }
                                     }
                                     Button {
-                                        enabled: panels.model>1
+                                        enabled: panels.model.count>1
                                         text: qsTr("Clear")
                                         onClicked: {
-                                            const n = panels.model;
-                                            for (let i=0; i<n; i++)
-                                                panels.objectAt(i).reset();
-                                            panels.model = 1;
+                                            root.panelCount = 1;
+                                            panels.model.remove(1, panels.model.count-1);
                                         }
                                     }
                                     ComboBox {
