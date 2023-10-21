@@ -37,7 +37,6 @@ Item {
             property bool fullscreen: false
             onClosing: {
                 windowSettings.sync();
-                panels.model.remove(index, 1);
             }
             onScreenChanged: {
                 bindToScreen();
