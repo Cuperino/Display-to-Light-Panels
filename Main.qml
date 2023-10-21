@@ -1,11 +1,10 @@
 // Copyright (C) 2023 Javier O. Cordero Pérez
 // SPDX-License-Identifier: GPL-3.0-only
 
+import QtCore
 import QtQuick
-import QtQuick.Controls
 import QtQuick.Layouts
 import QtQml.Models
-import QtCore
 import QtQuick.Controls.Universal
 
 import DisplayToLightPanel
@@ -76,6 +75,9 @@ Item {
                 property alias opacity: opacityAnimation.reverse
                 property alias yOffset: controls.yOffset
             }
+            Universal.foreground: screenModel.lightness < 64 ? "#FFF" : "#000"
+            Universal.background: screenModel.lightness < 64 ? Universal.Steel : "#FFF"
+            Universal.accent: screenModel.lightness < 64 ? Universal.Steel : Universal.Cobalt
             ScreenModel {
                 id: screenModel
                 hue: 180
@@ -227,9 +229,6 @@ Item {
                                 fill: parent
                                 margins: 5
                             }
-                            Universal.foreground: lightness.value < 64 ? "#FFF" : "#000"
-                            Universal.background: lightness.value < 64 ? Universal.Steel : "#FFF"
-                            Universal.accent: lightness.value < 64 ? Universal.Steel : Universal.Cobalt
                             ColumnLayout {
                                 id: columnLayout
                                 anchors.fill: parent

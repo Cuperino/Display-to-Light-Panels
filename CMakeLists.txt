@@ -24,8 +24,12 @@ qt_add_resources(appDisplayToLightPanel "configuration"
 
 qt_add_qml_module(appDisplayToLightPanel
     URI DisplayToLightPanel
+    RESOURCE_PREFIX /qt/qml/
     VERSION 1.0
+    NO_PLUGIN
+    IMPORTS "QtQuick.Controls.Universal"
     QML_FILES Main.qml
+    # ENABLE_TYPE_COMPILER
     SOURCES screenmodel.h screenmodel.cpp internalmessagebroker.hpp
 )
 
@@ -35,6 +39,7 @@ set_target_properties(appDisplayToLightPanel PROPERTIES
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
+    QML_CACHEGEN_DIRECT_CALLS ON
 )
 
 target_link_libraries(appDisplayToLightPanel

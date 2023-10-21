@@ -9,7 +9,7 @@ int main(int argc, char* argv[])
     QGuiApplication::setApplicationName(QString::fromUtf8("LightPanel"));
 
     QQmlApplicationEngine engine;
-    const QUrl url(u"qrc:/DisplayToLightPanel/Main.qml"_qs);
+    const QUrl url(u"qrc:/qt/qml/DisplayToLightPanel/Main.qml"_qs);
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreationFailed,
         &app, []() { QCoreApplication::exit(-1); },
