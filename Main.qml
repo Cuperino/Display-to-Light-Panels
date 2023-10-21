@@ -37,8 +37,7 @@ Item {
             property bool fullscreen: false
             onClosing: {
                 windowSettings.sync();
-                if (root.panelCount>1)
-                    root.panelCount--;
+                panels.model.remove(index, 1);
             }
             onScreenChanged: {
                 bindToScreen();
