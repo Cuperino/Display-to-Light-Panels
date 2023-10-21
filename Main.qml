@@ -384,7 +384,7 @@ Item {
                                     }
                                     Button {
                                         text: qsTr("White")
-                                        enabled: screenModel.lightness!=255
+                                        enabled: screenModel.lightness !== 255
                                         onClicked: {
                                             screenModel.lightness = 255
                                         }
