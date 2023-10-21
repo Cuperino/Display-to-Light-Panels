@@ -26,6 +26,7 @@ qt_add_qml_module(appDisplayToLightPanel
     URI DisplayToLightPanel
     VERSION 1.0
     QML_FILES Main.qml
+    SOURCES screenmodel.h screenmodel.cpp internalmessagebroker.hpp
 )
 
 set_target_properties(appDisplayToLightPanel PROPERTIES

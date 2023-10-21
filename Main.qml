@@ -8,6 +8,8 @@ import QtQml.Models
 import QtCore
 import QtQuick.Controls.Universal
 
+import DisplayToLightPanel
+
 Item {
     id: root
     property bool showAbout: false
@@ -26,7 +28,7 @@ Item {
             minimumHeight: controls.enabled ? controlsGroupBox.implicitHeight : 64
             title: index===-1 || panels.count<2 ? qsTr("Light Panels") : qsTr("Light Panels (%0)").arg(index + 1)
             visible: true
-            color: Qt.hsla(hue.value/360, saturation.value/255, lightness.value/255)
+            color: Qt.hsla(screenModel.hue/360, screenModel.saturation/255, screenModel.lightness/255)
             flags: Qt.WindowFullscreenButtonHint | (windowZ.currentIndex ? (windowZ.currentIndex === 1 ? Qt.WindowStaysOnTopHint : Qt.WindowStaysOnBottomHint) : 0) | (frameless.checked ? Qt.FramelessWindowHint : 0)
             property bool fullscreen: false
             onClosing: {
@@ -41,12 +43,7 @@ Item {
                 bindToScreen();
             }
             function bindToScreen() {
-                for (let i=0; i<Qt.application.screens.length; i++)
-                    if (screen.name === Qt.application.screens[i].name) {
-                        hue.value = Qt.binding(function() { return screens.itemAt(i).hue})
-                        lightness.value = Qt.binding(function() { return screens.itemAt(i).lightness; })
-                        saturation.value = Qt.binding(function() { return screens.itemAt(i).saturation; })
-                    }
+                screenModel.screenName = screen.name
             }
             function reset() {
                 root.showAbout = false;
@@ -54,9 +51,9 @@ Item {
                 lightPanel.height = 480;
                 lightPanel.x = (screen.width - lightPanel.width) / 2;
                 lightPanel.y = (screen.height - lightPanel.height) / 2;
-                hue.value = 180;
-                lightness.value = 250;
-                saturation.value = 255;
+                screenModel.hue = 180;
+                screenModel.lightness = 250;
+                screenModel.saturation = 255;
                 fullScreen.checked = false;
                 frameless.checked = false;
                 windowZ.currentIndex = 0;
@@ -76,6 +73,12 @@ Item {
                 property alias z: windowZ.currentIndex
                 property alias opacity: opacityAnimation.reverse
                 property alias yOffset: controls.yOffset
+            }
+            ScreenModel {
+                id: screenModel
+                hue: 180
+                lightness: 250
+                saturation: 255
             }
             MouseArea {
                 id: showHideControls
@@ -131,6 +134,13 @@ Item {
                     id: clickTimer
                     interval: 200
                     onTriggered: singleClick()
+                }
+                Settings {
+                    // Append suffix in case screen returns an empty string
+                    category: screen.name + "s"
+                    property alias hue: screenModel.hue
+                    property alias lightness: screenModel.lightness
+                    property alias saturation: screenModel.saturation
                 }
                 OpacityAnimator {
                     id: opacityAnimation
@@ -199,17 +209,17 @@ Item {
                                 anchors.fill: parent
                                 RowLayout {
                                     id: hue
-                                    property int value: 180
                                     Label {
                                         text: qsTr("Hue")
                                     }
                                     Slider {
                                         id: hueSlider
-                                        value: hue.value
+                                        value: screenModel.hue
                                         to: 360
                                         Layout.fillWidth: true
                                         onValueChanged: {
-                                            hue.value = value;
+                                            if (pressed)
+                                                screenModel.hue = value;
                                         }
                                         NumberAnimation on value {
                                             running: root.showAbout
@@ -221,79 +231,82 @@ Item {
                                             property int tLight: 0
                                             property int tSat: 0
                                             onStarted: {
-                                                tHue = hue.value;
-                                                tLight = lightness.value;
-                                                tSat = saturation.value;
-                                                lightness.value = 248;
-                                                saturation.value = 255;
+                                                tHue = screenModel.hue;
+                                                tLight = screenModel.lightness;
+                                                tSat = screenModel.saturation;
+                                                screenModel.lightness = 248;
+                                                screenModel.saturation = 255;
                                                 hueSlider.enabled = false;
                                             }
                                             onStopped: {
                                                 root.showAbout = false;
                                                 hueSlider.enabled = true;
-                                                hue.value = tHue;
-                                                lightness.value = tLight;
-                                                saturation.value = tSat;
+                                                screenModel.hue = tHue;
+                                                screenModel.lightness = tLight;
+                                                screenModel.saturation = tSat;
                                             }
                                         }
                                     }
                                     SpinBox {
                                         id: hueSpinBox
-                                        value: hue.value
+                                        value: screenModel.hue
                                         editable: true
                                         to: 360
                                         onValueChanged: {
-                                            hue.value = value;
+                                            if (down.pressed || up.pressed)
+                                                screenModel.hue = value;
                                         }
                                     }
                                 }
                                 RowLayout {
                                     id: lightness
-                                    property int value: 250
                                     Label {
                                         text: qsTr("Lightness")
                                     }
                                     Slider {
                                         id: lightnessSlider
-                                        value: lightness.value
+                                        value: screenModel.lightness
                                         to: 255
                                         Layout.fillWidth: true
                                         onValueChanged: {
-                                            lightness.value = value;
+                                            if (pressed)
+                                                screenModel.lightness = value;
                                         }
                                     }
                                     SpinBox {
                                         id: lightnessSpinBox
-                                        value: lightness.value
+                                        value: screenModel.lightness
                                         editable: true
                                         to: 255
                                         onValueChanged: {
-                                            lightness.value = value;
+                                            if (down.pressed || up.pressed)
+                                                screenModel.lightness = value;
                                         }
                                     }
                                 }
                                 RowLayout {
                                     id: saturation
-                                    property int value: 255
                                     Label {
                                         text: qsTr("Saturation")
                                     }
                                     Slider {
                                         id: saturationSlider
-                                        value: saturation.value
+                                        value: screenModel.saturation
                                         to: 255
                                         Layout.fillWidth: true
                                         onValueChanged: {
-                                            saturation.value = value;
+                                            if (pressed)
+                                                screenModel.saturation = value;
                                         }
                                     }
                                     SpinBox {
                                         id: saturationSpinBox
-                                        value: saturation.value
+                                        value: screenModel.saturation
                                         editable: true
                                         to: 255
                                         onValueChanged: {
-                                            saturation.value = value;
+                                            if (down.pressed || up.pressed)
+                                                screenModel.saturation = value;
                                         }
                                     }
                                 }
@@ -346,9 +359,9 @@ Item {
                                     }
                                     Button {
                                         text: qsTr("White")
-                                        enabled: lightness.value!=255
+                                        enabled: screenModel.lightness!=255
                                         onClicked: {
-                                            lightness.value = 255
+                                            screenModel.lightness = 255
                                         }
                                     }
                                 }
@@ -392,27 +405,6 @@ Item {
                     }
                 }
             }
-        }
-    }
-    Repeater {
-        id: screens
-        model: Qt.application.screens
-        delegate: Item {
-            id: screenMetadata
-            property string name: model.name
-            property int hue: 180
-            property int lightness: 250
-            property int saturation: 255
-            Settings {
-                id: colorSettings
-                category: "s" + screenMetadata.name
-                property alias hue: screenMetadata.hue
-                property alias lightness: screenMetadata.lightness
-                property alias saturation: screenMetadata.saturation
-            }
-        }
-        onItemRemoved: {
-            colorSettings.sync();
         }
     }
 }
