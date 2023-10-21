@@ -23,9 +23,9 @@ public:
     }
 
 signals:
-    void hueChanged(int, bool);
-    void lightnessChanged(int, bool);
-    void saturationChanged(int, bool);
+    void hueChanged(int, bool, const QString &);
+    void lightnessChanged(int, bool, const QString &);
+    void saturationChanged(int, bool, const QString &);
 };
 
 #endif // INTERNALMESSAGEBROKER_H

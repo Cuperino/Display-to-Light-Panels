@@ -7,8 +7,6 @@
 ScreenModel::ScreenModel(QObject* parent)
     : QObject { parent }
 {
-    initializeScreenMap();
-
     connect(qGuiApp, &QGuiApplication::screenAdded, this, &ScreenModel::initializeScreenMap);
     connect(qGuiApp, &QGuiApplication::screenRemoved, this, &ScreenModel::initializeScreenMap);
 
@@ -19,7 +17,6 @@ ScreenModel::ScreenModel(QObject* parent)
     connect(m_mb.get(), &InternalMessageBroker::lightnessChanged, this, &ScreenModel::setScreenLightness);
     connect(this, &ScreenModel::spreadSaturationChange, m_mb.get(), &InternalMessageBroker::saturationChanged);
     connect(m_mb.get(), &InternalMessageBroker::saturationChanged, this, &ScreenModel::setScreenSaturation);
-
 }
 
 QString ScreenModel::getCurrentScreen()
@@ -41,9 +38,9 @@ void ScreenModel::initializeScreenMap()
             saturation
         };
         m_screens[screenName] = color;
-        emit spreadLightnessChange(hue, false);
-        emit spreadLightnessChange(lightness, false);
-        emit spreadLightnessChange(saturation, false);
+        emit spreadHueChange(hue, false, screenName);
+        emit spreadLightnessChange(lightness, false, screenName);
+        emit spreadSaturationChange(saturation, false, screenName);
     }
 }
 
@@ -65,32 +62,42 @@ int ScreenModel::getScreenSaturation()
 void ScreenModel::setCurrentScreen(const QString &screenName)
 {
     m_currentScreen = screenName;
+    initializeScreenMap();
 }
 
-void ScreenModel::setScreenHue(int hue, bool spread)
+void ScreenModel::setScreenHue(int hue, bool spread, const QString &screenName)
 {
-    m_screens[m_currentScreen].hue = hue;
-    if (spread)
-        emit spreadHueChange(hue, false);
-    else
+    if (spread) {
+        m_screens[m_currentScreen].hue = hue;
+        emit spreadHueChange(hue, false, m_currentScreen);
+    }
+    else if (m_currentScreen == screenName) {
+        m_screens[m_currentScreen].hue = hue;
         emit screenHueChanged();
+    }
 }
 
-void ScreenModel::setScreenLightness(int lightness, bool spread)
+void ScreenModel::setScreenLightness(int lightness, bool spread, const QString &screenName)
 {
-    m_screens[m_currentScreen].lightness = lightness;
-    if (spread)
-        emit spreadLightnessChange(lightness, false);
-    else
+    if (spread) {
+        m_screens[m_currentScreen].lightness = lightness;
+        emit spreadLightnessChange(lightness, false, m_currentScreen);
+    }
+    else if (m_currentScreen == screenName) {
+        m_screens[m_currentScreen].lightness = lightness;
         emit screenLightnessChanged();
+    }
 }
 
-void ScreenModel::setScreenSaturation(int saturation, bool spread)
+void ScreenModel::setScreenSaturation(int saturation, bool spread, const QString &screenName)
 {
-    m_screens[m_currentScreen].saturation = saturation;
-    if (spread)
-        emit spreadSaturationChange(saturation, false);
-    else
+    if (spread) {
+        m_screens[m_currentScreen].saturation = saturation;
+        emit spreadSaturationChange(saturation, false, m_currentScreen);
+    }
+    else if (m_currentScreen == screenName) {
+        m_screens[m_currentScreen].saturation = saturation;
         emit screenSaturationChanged();
+    }
 }
 

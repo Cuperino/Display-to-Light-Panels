@@ -36,6 +36,7 @@ Item {
             flags: Qt.WindowFullscreenButtonHint | (windowZ.currentIndex ? (windowZ.currentIndex === 1 ? Qt.WindowStaysOnTopHint : Qt.WindowStaysOnBottomHint) : 0) | (frameless.checked ? Qt.FramelessWindowHint : 0)
             property bool fullscreen: false
             onClosing: {
+                screenSettings.sync();
                 windowSettings.sync();
             }
             onScreenChanged: {
@@ -47,7 +48,9 @@ Item {
                     textAnimation.trigger();
             }
             function bindToScreen() {
-                screenModel.screenName = screen.name
+                const scr = screen.name;
+                screenSettings.category = scr + "s";
+                screenModel.screenName = scr;
             }
             function reset() {
                 root.showAbout = false;
@@ -77,6 +80,7 @@ Item {
                 property alias z: windowZ.currentIndex
                 property alias opacity: opacityAnimation.reverse
                 property alias yOffset: controls.yOffset
+                property alias screenName: screenModel.screenName
             }
             Universal.foreground: screenModel.lightness < 64 ? "#FFF" : "#000"
             Universal.background: screenModel.lightness < 64 ? Universal.Steel : "#FFF"
@@ -86,6 +90,7 @@ Item {
                 hue: 180
                 lightness: 250
                 saturation: 255
+                screenName: lightPanel.screen.name
             }
             MouseArea {
                 id: showHideControls
@@ -143,8 +148,9 @@ Item {
                     onTriggered: singleClick()
                 }
                 Settings {
+                    id: screenSettings
                     // Append suffix in case screen returns an empty string
-                    category: screen.name + "s"
+                    category: screenModel.screenName + "s"
                     property alias hue: screenModel.hue
                     property alias lightness: screenModel.lightness
                     property alias saturation: screenModel.saturation

@@ -30,16 +30,16 @@ public:
     int getScreenSaturation();
 
     void setCurrentScreen(const QString &screenName);
-    void setScreenHue(int hue, bool spread=true);
-    void setScreenLightness(int lightness, bool spread=true);
-    void setScreenSaturation(int saturation, bool spread=true);
+    void setScreenHue(int hue, bool spread=true, const QString &screenName="s");
+    void setScreenLightness(int lightness, bool spread=true, const QString &screenName="s");
+    void setScreenSaturation(int saturation, bool spread=true, const QString &screenName="s");
 
 signals:
     void currentScreenChanged();
 
-    void spreadHueChange(int hue, bool baseCase);
-    void spreadLightnessChange(int lightness, bool baseCase);
-    void spreadSaturationChange(int saturation, bool baseCase);
+    void spreadHueChange(int hue, bool baseCase, const QString &);
+    void spreadLightnessChange(int lightness, bool baseCase, const QString &);
+    void spreadSaturationChange(int saturation, bool baseCase, const QString &);
 
     void screenHueChanged();
     void screenLightnessChanged();
