@@ -41,6 +41,8 @@ Item {
             }
             Component.onCompleted: {
                 bindToScreen();
+                if (!opacityAnimation.visible)
+                    textAnimationDelay.trigger();
             }
             function bindToScreen() {
                 screenModel.screenName = screen.name
@@ -106,8 +108,8 @@ Item {
                         moved = true;
                     }
                 }
-                onClicked: {
-                    if (mouse.button == Qt.RightButton) {
+                onClicked: (mouse) => {
+                    if (mouse.button === Qt.RightButton) {
                         if (timer.running)
                         {
                             timer.stop()
@@ -145,6 +147,7 @@ Item {
                 OpacityAnimator {
                     id: opacityAnimation
                     property bool reverse: false
+                    property alias visible: opacityAnimation.reverse
                     from: reverse ? 1 : 0;
                     to: reverse ? 0 : 1;
                     duration: 500
@@ -155,22 +158,45 @@ Item {
                     }
                     onFinished: {
                         if (lightPanel.fullscreen) {
-                            if (reverse)
+                            if (reverse) {
                                 controls.enabled = false;
+                                textAnimation.start();
+                            }
                             else
                                 controls.enabled = true;
                             if (lightPanel.fullscreen)
                                 lightPanel.showFullScreen();
                         }
                         else {
-                            if (reverse)
+                            if (reverse) {
                                 controls.enabled = false;
+                                textAnimation.trigger();
+                            }
                             else
                                 controls.enabled = true;
                             if (!lightPanel.fullscreen)
                                 lightPanel.showNormal();
                         }
                     }
+                }
+                OpacityAnimator {
+                    id: textAnimation
+                    property bool ranOnce: false
+                    from: 1
+                    to: 0
+                    duration: 500
+                    target: instructions_0;
+                    function trigger() {
+                        if (!ranOnce) {
+                            ranOnce = true;
+                            textAnimationDelay.start();
+                        }
+                    }
+                }
+                Timer{
+                    id: textAnimationDelay
+                    interval: 2000
+                    onTriggered: textAnimation.start();
                 }
                 Item {
                     id: controls
@@ -403,6 +429,13 @@ Item {
                             }
                         }
                     }
+                }
+                Label {
+                    id: instructions_0
+                    text: opacityAnimation.visible ? qsTr("Double click to show controls") :  qsTr("Double click to hide controls")
+                    anchors.bottom: parent.bottom
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.margins: 8
                 }
             }
         }
