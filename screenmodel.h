@@ -1,5 +1,4 @@
-#ifndef SCREENMODEL_H
-#define SCREENMODEL_H
+#pragma once
 
 #include "internalmessagebroker.hpp"
 
@@ -51,5 +50,3 @@ private:
     QString m_currentScreen;
     QMap<const QString, ColorProperties> m_screens;
 };
-
-#endif // SCREENMODEL_H

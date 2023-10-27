@@ -1,5 +1,4 @@
-#ifndef INTERNALMESSAGEBROKER_H
-#define INTERNALMESSAGEBROKER_H
+#pragma once
 
 #include <QObject>
 
@@ -27,5 +26,3 @@ signals:
     void lightnessChanged(int, bool, const QString &);
     void saturationChanged(int, bool, const QString &);
 };
-
-#endif // INTERNALMESSAGEBROKER_H
