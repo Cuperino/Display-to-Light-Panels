@@ -445,6 +445,16 @@ Item {
                     anchors.margins: 8
                 }
             }
+            Shortcut {
+                sequence: StandardKey.Close
+                context: Qt.WindowShortcut
+                onActivated: lightPanel.close()
+            }
         }
+    }
+    Shortcut {
+        sequence: StandardKey.Quit
+        context: Qt.ApplicationShortcut
+        onActivated: Qt.quit()
     }
 }
