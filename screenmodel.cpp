@@ -8,7 +8,6 @@ ScreenModel::ScreenModel(QObject* parent)
     : QObject { parent }
 {
     connect(qGuiApp, &QGuiApplication::screenAdded, this, &ScreenModel::initializeScreenMap);
-    connect(qGuiApp, &QGuiApplication::screenRemoved, this, &ScreenModel::initializeScreenMap);
 
     m_mb = InternalMessageBroker::instance();
     connect(this, &ScreenModel::spreadHueChange, m_mb.get(), &InternalMessageBroker::hueChanged);
