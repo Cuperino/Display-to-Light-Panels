@@ -67,7 +67,7 @@ Item {
                     textAnimation.trigger();
                 if (skip) {
                     panels.skips++;
-                    if (panels.skips===root.panelCount)
+                    if (panels.skips===root.panelCount) {
                         lightPanel.clearAll();
                         panels.addPanel();
                     }
