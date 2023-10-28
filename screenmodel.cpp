@@ -100,3 +100,11 @@ void ScreenModel::setScreenSaturation(int saturation, bool spread, const QString
     }
 }
 
+void ScreenModel::clear(const int length)
+{
+    QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
+    for (int i=-1; i<length; i++) {
+        auto key = QStringLiteral("n%1").arg(i);
+        settings.remove(key);
+    }
+}

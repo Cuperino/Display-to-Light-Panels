@@ -425,6 +425,7 @@ Item {
                                         onClicked: {
                                             startupTimer.stop();
                                             root.panelCount = 1;
+                                            screenModel.clear(panels.model.count);
                                             panels.model.remove(1, panels.model.count-1);
                                         }
                                     }

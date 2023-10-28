@@ -33,6 +33,8 @@ public:
     void setScreenLightness(int lightness, bool spread=true, const QString &screenName="s");
     void setScreenSaturation(int saturation, bool spread=true, const QString &screenName="s");
 
+    Q_INVOKABLE void clear(const int length);
+
 signals:
     void currentScreenChanged();
 
