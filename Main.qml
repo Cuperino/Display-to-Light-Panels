@@ -77,7 +77,8 @@ Item {
                 startupTimer.stop();
                 root.panelCount = 1;
                 screenModel.clear(panels.model.count);
-                panels.model.remove(1, panels.model.count-1);
+                panels.model.remove(0, index);
+                panels.model.remove(index+1, panels.model.count-index-1);
             }
             function bindToScreen() {
                 const scr = screen.name;
