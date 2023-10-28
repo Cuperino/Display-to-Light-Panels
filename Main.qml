@@ -17,13 +17,22 @@ Item {
         category: "panels"
         property alias panelCount: root.panelCount
     }
+    Timer {
+        id: startupTimer
+        property int w: 0
+        interval: 1
+        repeat: true
+        running: true
+        triggeredOnStart: true
+        onTriggered: {
+            panels.model.insert(0, {});
+            if (++w===root.panelCount)
+                stop();
+        }
+    }
     Instantiator {
         id: panels
         model: ListModel {}
-        Component.onCompleted: {
-            for (let i=0; i<root.panelCount; i++)
-                model.insert(0, {});
-        }
         delegate: Window {
             id: lightPanel
             width: 640
@@ -414,6 +423,7 @@ Item {
                                         enabled: panels.model.count>1
                                         text: qsTr("Clear")
                                         onClicked: {
+                                            startupTimer.stop();
                                             root.panelCount = 1;
                                             panels.model.remove(1, panels.model.count-1);
                                         }
