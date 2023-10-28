@@ -26,13 +26,18 @@ Item {
         running: true
         triggeredOnStart: true
         onTriggered: {
-            panels.model.insert(0, {});
+            panels.model.append({});
             if (++w===root.panelCount)
                 stop();
         }
     }
     Instantiator {
         id: panels
+        property int skips: 0
+        function addPanel() {
+            panels.model.append({});
+            root.panelCount++;
+        }
         model: ListModel {}
         delegate: Window {
             id: lightPanel
@@ -40,7 +45,7 @@ Item {
             height: 480
             minimumWidth: controls.enabled ? controlsGroupBox.implicitWidth : 64
             minimumHeight: controls.enabled ? controlsGroupBox.implicitHeight : 64
-            title: index===-1 || panels.count<2 ? qsTr("Light Panels") : qsTr("Light Panels (%0)").arg(index + 1)
+            title: qsTr("Light Panels <%0> ").arg(screenModel.screenName)
             visible: !skip
             color: Qt.hsla(screenModel.hue/360, screenModel.saturation/255, screenModel.lightness/255)
             flags: Qt.WindowFullscreenButtonHint | (windowZ.currentIndex ? (windowZ.currentIndex === 1 ? Qt.WindowStaysOnTopHint : Qt.WindowStaysOnBottomHint) : 0) | (frameless.checked ? Qt.FramelessWindowHint : 0)
@@ -60,6 +65,21 @@ Item {
                 bindToScreen();
                 if (!opacityAnimation.visible)
                     textAnimation.trigger();
+                if (skip) {
+                    console.log(panels.skips);
+                    panels.skips++;
+                    if (panels.skips===root.panelCount) {
+                        console.log("IN");
+                        lightPanel.clearAll();
+                        panels.addPanel();
+                    }
+                }
+            }
+            function clearAll() {
+                startupTimer.stop();
+                root.panelCount = 1;
+                screenModel.clear(panels.model.count);
+                panels.model.remove(1, panels.model.count-1);
             }
             function bindToScreen() {
                 const scr = screen.name;
@@ -432,20 +452,12 @@ Item {
                                     Button {
                                         visible: Qt.platform.os!=="android" && Qt.platform.os!=="ios"
                                         text: qsTr("Add Window")
-                                        onClicked: {
-                                            panels.model.insert(panels.model.count, {});
-                                            root.panelCount++;
-                                        }
+                                        onClicked: panels.addPanel()
                                     }
                                     Button {
                                         enabled: panels.model.count>1
                                         text: qsTr("Clear")
-                                        onClicked: {
-                                            startupTimer.stop();
-                                            root.panelCount = 1;
-                                            screenModel.clear(panels.model.count);
-                                            panels.model.remove(1, panels.model.count-1);
-                                        }
+                                        onClicked: lightPanel.clearAll()
                                     }
                                     ComboBox {
                                         id: windowZ
