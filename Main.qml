@@ -100,6 +100,13 @@ Item {
                 controls.yOffset = 0.86
                 root.showAbout = false;
             }
+            function toggleFullScreen() {
+                if (fullscreen)
+                    showNormal();
+                else
+                    showFullScreen();
+                fullscreen = !fullscreen;
+            }
             Settings {
                 id: windowSettings
                 category: "n" + index.toString()
@@ -396,13 +403,7 @@ Item {
                                         visible: enabled
                                         text: qsTr("Fullscreen")
                                         checked: lightPanel.fullscreen
-                                        onClicked: {
-                                            if (lightPanel.fullscreen)
-                                                lightPanel.showNormal();
-                                            else
-                                                lightPanel.showFullScreen();
-                                            lightPanel.fullscreen = !lightPanel.fullscreen;
-                                        }
+                                        onToggled: lightPanel.toggleFullScreen()
                                     }
                                     CheckBox {
                                         id: frameless
@@ -483,6 +484,16 @@ Item {
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.margins: 8
                 }
+            }
+            Shortcut {
+                sequence: StandardKey.New
+                context: Qt.WindowShortcut
+                onActivated: panels.addPanel()
+            }
+            Shortcut {
+                sequence: StandardKey.FullScreen
+                context: Qt.WindowShortcut
+                onActivated: lightPanel.toggleFullScreen()
             }
             Shortcut {
                 sequence: StandardKey.Close
