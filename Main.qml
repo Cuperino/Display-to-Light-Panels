@@ -55,9 +55,7 @@ Item {
                     close.accepted = false;
                 }
             }
-            onScreenChanged: {
-                bindToScreen();
-            }
+            onScreenChanged: bindToScreen();
             Component.onCompleted: {
                 bindToScreen();
                 if (!opacityAnimation.visible)
@@ -154,9 +152,7 @@ Item {
                 onClicked: (mouse) => {
                     if (mouse.button === Qt.RightButton) {
                         if (timer.running)
-                        {
                             timer.stop()
-                        }
                         else {
                             frameless.checked = !frameless.checked;
                             timer.restart()
@@ -197,9 +193,7 @@ Item {
                     duration: 500
                     running: !reverse
                     target: controls;
-                    onStarted: {
-                        controls.enabled = true;
-                    }
+                    onStarted: controls.enabled = true;
                     onFinished: {
                         if (lightPanel.fullscreen) {
                             if (reverse) {
