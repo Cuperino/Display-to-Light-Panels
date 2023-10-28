@@ -29,9 +29,9 @@ public:
     int getScreenSaturation();
 
     void setCurrentScreen(const QString &screenName);
-    void setScreenHue(int hue, bool spread=true, const QString &screenName="s");
-    void setScreenLightness(int lightness, bool spread=true, const QString &screenName="s");
-    void setScreenSaturation(int saturation, bool spread=true, const QString &screenName="s");
+    void setScreenHue(const int hue, const bool spread=true, const QString &screenName="s");
+    void setScreenLightness(const int lightness, const bool spread=true, const QString &screenName="s");
+    void setScreenSaturation(const int saturation, const bool spread=true, const QString &screenName="s");
 
     Q_INVOKABLE void clear(const int length);
 

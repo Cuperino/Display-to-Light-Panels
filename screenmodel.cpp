@@ -64,7 +64,7 @@ void ScreenModel::setCurrentScreen(const QString &screenName)
     initializeScreenMap();
 }
 
-void ScreenModel::setScreenHue(int hue, bool spread, const QString &screenName)
+void ScreenModel::setScreenHue(const int hue, const bool spread, const QString &screenName)
 {
     if (spread) {
         m_screens[m_currentScreen].hue = hue;
@@ -76,7 +76,7 @@ void ScreenModel::setScreenHue(int hue, bool spread, const QString &screenName)
     }
 }
 
-void ScreenModel::setScreenLightness(int lightness, bool spread, const QString &screenName)
+void ScreenModel::setScreenLightness(const int lightness, const bool spread, const QString &screenName)
 {
     if (spread) {
         m_screens[m_currentScreen].lightness = lightness;
@@ -88,7 +88,7 @@ void ScreenModel::setScreenLightness(int lightness, bool spread, const QString &
     }
 }
 
-void ScreenModel::setScreenSaturation(int saturation, bool spread, const QString &screenName)
+void ScreenModel::setScreenSaturation(const int saturation, const bool spread, const QString &screenName)
 {
     if (spread) {
         m_screens[m_currentScreen].saturation = saturation;
