@@ -180,6 +180,7 @@ Item {
                 id: showHideControls
                 anchors.fill: parent
                 cursorShape: pressed ? Qt.ClosedHandCursor : Qt.PointingHandCursor
+                acceptedButtons: Qt.LeftButton | Qt.MiddleButton
                 property alias root: lightPanel
                 property int prevX: 0
                 property int prevY: 0
@@ -203,14 +204,8 @@ Item {
                     }
                 }
                 onClicked: (mouse) => {
-                    if (mouse.button === Qt.RightButton) {
-                        if (timer.running)
-                            timer.stop()
-                        else {
-                            frameless.checked = !frameless.checked;
-                            timer.restart()
-                        }
-                    }
+                    if (mouse.button === Qt.MiddleButton)
+                        frameless.checked = !frameless.checked;
                 }
                 onDoubleClicked: {
                     toggle();
