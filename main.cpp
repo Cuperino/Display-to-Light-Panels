@@ -1,12 +1,12 @@
-#include <QGuiApplication>
+#include <QApplication>
 #include <QQmlApplicationEngine>
 
 int main(int argc, char* argv[])
 {
-    QGuiApplication app(argc, argv);
-    QGuiApplication::setOrganizationName(QString::fromUtf8("Cuperino"));
-    QGuiApplication::setOrganizationDomain(QString::fromUtf8("com.cuperino.lightpanel"));
-    QGuiApplication::setApplicationName(QString::fromUtf8("LightPanel"));
+    QApplication app(argc, argv);
+    QApplication::setOrganizationName(QString::fromUtf8("Cuperino"));
+    QApplication::setOrganizationDomain(QString::fromUtf8("com.cuperino.lightpanel"));
+    QApplication::setApplicationName(QString::fromUtf8("LightPanel"));
 
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/qt/qml/DisplayToLightPanel/Main.qml"_qs);

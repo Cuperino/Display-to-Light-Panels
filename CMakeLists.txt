@@ -8,7 +8,7 @@ project(DisplayToLightPanel
 
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.5 REQUIRED COMPONENTS Quick)
+find_package(Qt6 6.5 REQUIRED COMPONENTS Widgets Quick)
 
 qt_standard_project_setup()
 
@@ -43,7 +43,7 @@ set_target_properties(appDisplayToLightPanel PROPERTIES
 )
 
 target_link_libraries(appDisplayToLightPanel
-    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Widgets Qt6::Quick
 )
 
 include(GNUInstallDirs)

@@ -6,6 +6,7 @@ import QtQuick
 import QtQuick.Layouts
 import QtQml.Models
 import QtQuick.Controls.Universal
+import Qt.labs.platform as Labs
 
 import DisplayToLightPanel
 
@@ -40,13 +41,19 @@ Item {
             minimumWidth: controls.enabled ? controlsGroupBox.implicitWidth : 64
             minimumHeight: controls.enabled ? controlsGroupBox.implicitHeight : 64
             title: index===-1 || panels.count<2 ? qsTr("Light Panels") : qsTr("Light Panels (%0)").arg(index + 1)
-            visible: true
+            visible: !skip
             color: Qt.hsla(screenModel.hue/360, screenModel.saturation/255, screenModel.lightness/255)
             flags: Qt.WindowFullscreenButtonHint | (windowZ.currentIndex ? (windowZ.currentIndex === 1 ? Qt.WindowStaysOnTopHint : Qt.WindowStaysOnBottomHint) : 0) | (frameless.checked ? Qt.FramelessWindowHint : 0)
             property bool fullscreen: false
-            onClosing: {
-                screenSettings.sync();
-                windowSettings.sync();
+            property bool finishClosing: false
+            property bool skip: false
+            onClosing: (close) => {
+                if (finishClosing)
+                    skip = true;
+                else {
+                    closingDialog.open();
+                    close.accepted = false;
+                }
             }
             onScreenChanged: {
                 bindToScreen();
@@ -90,6 +97,7 @@ Item {
                 property alias opacity: opacityAnimation.reverse
                 property alias yOffset: controls.yOffset
                 property alias screenName: screenModel.screenName
+                property alias skip: lightPanel.skip
             }
             Universal.foreground: screenModel.lightness < 64 ? "#FFF" : "#000"
             Universal.background: screenModel.lightness < 64 ? Universal.Steel : "#FFF"
@@ -100,6 +108,22 @@ Item {
                 lightness: 250
                 saturation: 255
                 screenName: lightPanel.screen.name
+            }
+            Labs.MessageDialog {
+                id: closingDialog
+                title: qsTr("Closing Light Panel")
+                informativeText: qsTr("Would you like to save and quit, close the window, or cancel?")
+                modality: Qt.ApplicationModal
+                buttons: Labs.MessageDialog.Save | Labs.MessageDialog.Close | Labs.MessageDialog.Cancel
+                onSaveClicked: {
+                    windowSettings.sync();
+                    screenSettings.sync();
+                    Qt.quit()
+                }
+                onCloseClicked: {
+                    lightPanel.finishClosing = true;
+                    lightPanel.close();
+                }
             }
             MouseArea {
                 id: showHideControls
@@ -459,7 +483,10 @@ Item {
             Shortcut {
                 sequence: StandardKey.Close
                 context: Qt.WindowShortcut
-                onActivated: lightPanel.close()
+                onActivated: {
+                    lightPanel.finishClosing = true;
+                    lightPanel.close();
+                }
             }
         }
     }
