@@ -492,7 +492,7 @@ Item {
                 onActivated: panels.addPanel()
             }
             Shortcut {
-                sequence: StandardKey.FullScreen
+                sequences: [StandardKey.FullScreen]
                 context: Qt.WindowShortcut
                 onActivated: lightPanel.toggleFullScreen()
             }
