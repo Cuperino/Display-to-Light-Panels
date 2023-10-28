@@ -66,10 +66,8 @@ Item {
                 if (!opacityAnimation.visible)
                     textAnimation.trigger();
                 if (skip) {
-                    console.log(panels.skips);
                     panels.skips++;
-                    if (panels.skips===root.panelCount) {
-                        console.log("IN");
+                    if (panels.skips===root.panelCount)
                         lightPanel.clearAll();
                         panels.addPanel();
                     }
@@ -191,7 +189,7 @@ Item {
                         opacityAnimation.running = true;
                     }
                 }
-                Timer{
+                Timer {
                     id: clickTimer
                     interval: 200
                     onTriggered: singleClick()
@@ -251,7 +249,7 @@ Item {
                         }
                     }
                 }
-                Timer{
+                Timer {
                     id: textAnimationDelay
                     interval: 2000
                     onTriggered: textAnimation.start();
