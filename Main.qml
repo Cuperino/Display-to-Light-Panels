@@ -449,7 +449,7 @@ Item {
                                     }
                                     ComboBox {
                                         id: windowZ
-                                        model: Qt.platform.os==="osx" ? ["Normal", "Always in front"] : ["Normal", "Always in front", "Always behind"]
+                                        model: Qt.platform.os==="osx" ? [qsTr("Normal"), qsTr("Always in front")] : [qsTr("Normal"), qsTr("Always in front"), qsTr("Always behind")]
                                         Layout.fillWidth: true
                                     }
                                     Item {
