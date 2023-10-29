@@ -26,7 +26,7 @@ Item {
         running: true
         triggeredOnStart: true
         onTriggered: {
-            panels.model.append({});
+            panels.model.insert(0, {});
             if (++w===root.panelCount)
                 stop();
         }
