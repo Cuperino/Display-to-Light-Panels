@@ -177,6 +177,66 @@ Item {
                 }
             }
             MouseArea {
+                id: instructions
+                visible: opacity
+                enabled: visible
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                height: 38
+                acceptedButtons: Qt.NoButton
+                hoverEnabled: true
+                onEntered: flipable.flipped = true
+                onExited: flipable.flipped = false
+                Flipable {
+                    id: flipable
+                    anchors.fill: parent
+                    property bool flipped: false
+                    front: Rectangle {
+                        color: lightPanel.color
+                        anchors.fill: parent
+                        Label {
+                            text: opacityAnimation.visible ? qsTr("Double click to show controls") : qsTr("Double click to hide controls")
+                            anchors.bottom: parent.bottom
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.margins: 8
+                        }
+                    }
+                    back: Rectangle {
+                        color: lightPanel.color
+                        anchors.fill: parent
+                        Label {
+                            text: qsTr("Middle click to hide frame")
+                            anchors.bottom: parent.bottom
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.margins: 8
+                        }
+                    }
+                    transform: Rotation {
+                        id: flipRotation
+                        origin.x: flipable.width/2
+                        origin.y: flipable.height/2
+                        axis.x: 0; axis.y: 1; axis.z: 0
+                        angle: 0
+                    }
+                    states: State {
+                        name: "back"
+                        PropertyChanges {
+                            target: flipRotation;
+                            angle: 180
+                        }
+                        when: flipable.flipped
+                    }
+                    transitions: Transition {
+                        NumberAnimation {
+                            target: flipRotation;
+                            property: "angle";
+                            duration: 250
+                        }
+                    }
+                }
+            }
+            MouseArea {
                 id: showHideControls
                 anchors.fill: parent
                 cursorShape: pressed ? Qt.ClosedHandCursor : Qt.PointingHandCursor
@@ -234,7 +294,7 @@ Item {
                 }
                 OpacityAnimator {
                     id: opacityAnimation
-                    property bool reverse: false
+                    property bool reverse: !controls.enabled
                     property alias visible: opacityAnimation.reverse
                     from: reverse ? 1 : 0;
                     to: reverse ? 0 : 1;
@@ -243,6 +303,7 @@ Item {
                     target: controls;
                     onStarted: controls.enabled = true;
                     onFinished: {
+                        textAnimationDelay.interval = 8000
                         if (lightPanel.fullscreen) {
                             if (reverse) {
                                 controls.enabled = false;
@@ -271,7 +332,7 @@ Item {
                     from: 1
                     to: 0
                     duration: 500
-                    target: instructions_0;
+                    target: instructions;
                     function trigger() {
                         if (!ranOnce) {
                             ranOnce = true;
@@ -281,7 +342,8 @@ Item {
                 }
                 Timer {
                     id: textAnimationDelay
-                    interval: 2000
+                    running: true
+                    interval: 5000
                     onTriggered: textAnimation.start();
                 }
                 Item {
@@ -293,6 +355,8 @@ Item {
                         left: parent.left
                         right: parent.right
                     }
+                    opacity: 0
+                    enabled: false
                     layer.enabled: true
                     layer.smooth: true
                     MouseArea {
@@ -308,7 +372,7 @@ Item {
                         }
                         GroupBox {
                             id: controlsGroupBox
-                            title: showAbout ? qsTr("Light Panels, © Javier Cordero, Licensed GPL-3.0") : qsTr("Panel Settings")
+                            title: showAbout ? qsTr("Display to Light Panel, © 2023 Javier Cordero, Licensed GPL-3.0") : qsTr("Panel Settings")
                             anchors {
                                 fill: parent
                                 margins: 5
@@ -474,13 +538,6 @@ Item {
                             }
                         }
                     }
-                }
-                Label {
-                    id: instructions_0
-                    text: opacityAnimation.visible ? qsTr("Double click to show controls") :  qsTr("Double click to hide controls")
-                    anchors.bottom: parent.bottom
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.margins: 8
                 }
             }
             Shortcut {
