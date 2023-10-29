@@ -206,7 +206,7 @@ Item {
                         color: lightPanel.color
                         anchors.fill: parent
                         Label {
-                            text: qsTr("Middle click to hide frame")
+                            text: frameless.checked ? qsTr("Middle click to show frame") : qsTr("Middle click to hide frame")
                             anchors.bottom: parent.bottom
                             anchors.horizontalCenter: parent.horizontalCenter
                             anchors.margins: 8
