@@ -45,7 +45,7 @@ Item {
             height: 480
             minimumWidth: controls.enabled ? controlsGroupBox.implicitWidth : 64
             minimumHeight: controls.enabled ? controlsGroupBox.implicitHeight : 64
-            title: qsTr("Light Panels <%0> ").arg(screenModel.screenName)
+            title: qsTr("Light Panels <%0> ").arg(screen.name)
             visible: !skip
             color: Qt.hsla(screenModel.hue/360, screenModel.saturation/255, screenModel.lightness/255)
             flags: Qt.WindowFullscreenButtonHint | (windowZ.currentIndex ? (windowZ.currentIndex === 1 ? Qt.WindowStaysOnTopHint : Qt.WindowStaysOnBottomHint) : 0) | (frameless.checked ? Qt.FramelessWindowHint : 0)
