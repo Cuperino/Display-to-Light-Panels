@@ -246,14 +246,14 @@ Item {
                 property int prevY: 0
                 property bool moved: false
                 onPressed: (mouse) => {
-                    if (Qt.platform.os!=="android") {
+                    if (Qt.platform.os!=="android" && Qt.platform.os!=="ios") {
                         prevX = mouse.x;
                         prevY = mouse.y;
                         moved = false;
                     }
                 }
                 onPositionChanged: (mouse) => {
-                    if (Qt.platform.os!=="android") {
+                    if (Qt.platform.os!=="android" && Qt.platform.os!=="ios") {
                         var deltaX = mouse.x - prevX;
                         root.x += deltaX;
                         prevX = mouse.x - deltaX;
@@ -508,10 +508,10 @@ Item {
                                     }
                                 }
                                 RowLayout {
+                                    visible: Qt.platform.os!=="android" && Qt.platform.os!=="ios"
                                     Layout.fillWidth: true
                                     Layout.fillHeight: true
                                     Button {
-                                        visible: Qt.platform.os!=="android" && Qt.platform.os!=="ios"
                                         text: qsTr("Add Window")
                                         onClicked: panels.addPanel()
                                     }
