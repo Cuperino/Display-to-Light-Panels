@@ -221,11 +221,11 @@ Item {
                     }
                     states: State {
                         name: "back"
+                        when: flipable.flipped
                         PropertyChanges {
                             target: flipRotation;
                             angle: 180
                         }
-                        when: flipable.flipped
                     }
                     transitions: Transition {
                         NumberAnimation {
@@ -265,7 +265,7 @@ Item {
                 }
                 onClicked: (mouse) => {
                     if (mouse.button === Qt.MiddleButton)
-                        frameless.checked = !frameless.checked;
+                        frameless.toggle();
                 }
                 onDoubleClicked: {
                     toggle();
@@ -549,6 +549,11 @@ Item {
                 sequences: [StandardKey.FullScreen]
                 context: Qt.WindowShortcut
                 onActivated: lightPanel.toggleFullScreen()
+            }
+            Shortcut {
+                sequence: StandardKey.Cancel
+                context: Qt.WindowShortcut
+                onActivated: frameless.toggle()
             }
             Shortcut {
                 sequence: StandardKey.Close
