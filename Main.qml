@@ -130,7 +130,6 @@ Item {
             Universal.accent: screenModel.lightness < 64 ? Universal.Steel : Universal.Cobalt
             ScreenModel {
                 id: screenModel
-                hue: 180
                 lightness: 250
                 saturation: 255
                 screenName: lightPanel.screen.name
