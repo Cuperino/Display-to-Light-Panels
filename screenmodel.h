@@ -1,3 +1,6 @@
+// Copyright (C) 2023 Javier O. Cordero Pérez
+// SPDX-License-Identifier: GPL-3.0-or-later
+
 #pragma once
 
 #include "internalmessagebroker.hpp"

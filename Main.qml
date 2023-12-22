@@ -1,5 +1,5 @@
 // Copyright (C) 2023 Javier O. Cordero Pérez
-// SPDX-License-Identifier: GPL-3.0-only
+// SPDX-License-Identifier: GPL-3.0-or-later
 
 import QtCore
 import QtQuick
