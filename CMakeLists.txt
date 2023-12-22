@@ -45,8 +45,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     MACOSX_BUNDLE TRUE
     WIN32_EXECUTABLE TRUE
     QML_CACHEGEN_DIRECT_CALLS ON
-    QT_QMLCACHEGEN_EXECUTABLE qmlsc
-    QT_QMLCACHEGEN_ARGUMENTS "--verbose;--direct-calls"
+    # QT_QMLCACHEGEN_EXECUTABLE qmlsc
+    QT_QMLCACHEGEN_ARGUMENTS "--verbose"
     # QT_QMLCACHEGEN_ARGUMENTS "--verbose;--static;--direct-calls"
 )
 
