@@ -53,8 +53,12 @@ Item {
             property bool finishClosing: false
             property bool skip: false
             onClosing: (close) => {
-                if (finishClosing)
+                if (root.panelCount===panels.skips+1)
+                    saveAndQuit();
+                else if (finishClosing) {
                     skip = true;
+                    panels.skips++;
+                }
                 else {
                     closingDialog.open();
                     close.accepted = false;
@@ -109,6 +113,11 @@ Item {
                 else
                     showFullScreen();
                 fullscreen = !fullscreen;
+            }
+            function saveAndQuit() {
+                windowSettings.sync();
+                screenSettings.sync();
+                Qt.quit();
             }
             Settings {
                 id: windowSettings
@@ -166,9 +175,7 @@ Item {
                 modality: Qt.ApplicationModal
                 buttons: Labs.MessageDialog.Save | Labs.MessageDialog.Close | Labs.MessageDialog.Cancel
                 onSaveClicked: {
-                    windowSettings.sync();
-                    screenSettings.sync();
-                    Qt.quit()
+                    lightPanel.saveAndQuit();
                 }
                 onCloseClicked: {
                     lightPanel.finishClosing = true;
