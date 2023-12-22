@@ -378,7 +378,7 @@ Item {
                         }
                         GroupBox {
                             id: controlsGroupBox
-                            title: showAbout ? qsTr("Display to Light Panel, © 2023 Javier Cordero, Licensed GPL-3.0") : qsTr("Panel Settings")
+                            title: root.showAbout ? qsTr("Display to Light Panel, © 2023 Javier Cordero, Licensed GPL-3.0") : qsTr("Panel Settings")
                             anchors {
                                 fill: parent
                                 margins: 5
