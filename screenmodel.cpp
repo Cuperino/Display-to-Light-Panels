@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Javier O. Cordero Pérez
+// Copyright (C) 2023-2025 Javier O. Cordero Pérez
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include "screenmodel.h"
@@ -29,7 +29,8 @@ QString ScreenModel::getCurrentScreen()
 void ScreenModel::initializeScreenMap()
 {
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
-    for (QScreen* screen : QGuiApplication::screens()) {
+    const auto screens = QGuiApplication::screens();
+    for (QScreen* screen : screens) {
         QString screenName = screen->name();
         const int hue = settings.value(screenName + "s/hue", 180).toInt();
         const int lightness = settings.value(screenName + "s/lightness", 250).toInt();

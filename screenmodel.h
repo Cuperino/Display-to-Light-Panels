@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Javier O. Cordero Pérez
+// Copyright (C) 2023-2025 Javier O. Cordero Pérez
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
@@ -53,5 +53,5 @@ private:
     void initializeScreenMap();
     std::shared_ptr<InternalMessageBroker> m_mb;
     QString m_currentScreen;
-    QMap<const QString, ColorProperties> m_screens;
+    QMap<QString, ColorProperties> m_screens;
 };

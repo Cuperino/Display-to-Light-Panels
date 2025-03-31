@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Javier O. Cordero Pérez
+// Copyright (C) 2023-2025 Javier O. Cordero Pérez
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #include <QApplication>
@@ -7,9 +7,9 @@
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
-    QApplication::setOrganizationName(QString::fromUtf8("Cuperino"));
-    QApplication::setOrganizationDomain(QString::fromUtf8("com.cuperino.lightpanel"));
-    QApplication::setApplicationName(QString::fromUtf8("LightPanel"));
+    QApplication::setOrganizationName(QString::fromLatin1("Cuperino"));
+    QApplication::setOrganizationDomain(QString::fromLatin1("com.cuperino.lightpanel"));
+    QApplication::setApplicationName(QString::fromLatin1("LightPanel"));
 
     QQmlApplicationEngine engine;
     const QUrl url(u"qrc:/qt/qml/DisplayToLightPanel/Main.qml"_qs);
