@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/qt/qml/com/cuperino/lightpanel">
+        <file>main.qml</file>
+    </qresource>
+</RCC>

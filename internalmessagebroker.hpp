@@ -1,4 +1,4 @@
-// Copyright (C) 2023 Javier O. Cordero Pérez
+// Copyright (C) 2023-2025 Javier O. Cordero Pérez
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 #pragma once
@@ -12,7 +12,6 @@ class InternalMessageBroker : public QObject
 private:
     // Hide regular constructor
     InternalMessageBroker() = default;
-    static InternalMessageBroker *self;
 
 public:
     // Disable copy constructor

@@ -4,6 +4,12 @@
 #include <QApplication>
 #include <QQmlApplicationEngine>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+using namespace Qt::Literals::StringLiterals;
+#else
+#include <screenmodel.h>
+#endif
+
 int main(int argc, char* argv[])
 {
     QApplication app(argc, argv);
@@ -12,11 +18,17 @@ int main(int argc, char* argv[])
     QApplication::setApplicationName(QString::fromLatin1("LightPanel"));
 
     QQmlApplicationEngine engine;
-    const QUrl url(u"qrc:/qt/qml/DisplayToLightPanel/Main.qml"_qs);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    const QUrl url(u"qrc:/qt/qml/com/cuperino/lightpanel/main.qml"_s);
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreationFailed,
         &app, []() { QCoreApplication::exit(-1); },
         Qt::QueuedConnection);
+#else
+    qmlRegisterType<ScreenModel>("com.cuperino.lightpanel", 1, 0, "ScreenModel");
+    const QUrl url(QLatin1String("qrc:/qt/qml/com/cuperino/lightpanel/main.qml"));
+#endif
     engine.load(url);
 
     return app.exec();

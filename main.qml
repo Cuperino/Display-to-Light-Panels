@@ -1,14 +1,20 @@
-// Copyright (C) 2023 Javier O. Cordero Pérez
+// Copyright (C) 2023-2025 Javier O. Cordero Pérez
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-import QtCore
-import QtQuick
-import QtQuick.Layouts
-import QtQml.Models
-import QtQuick.Controls.Universal
-import Qt.labs.platform as Labs
+// pragma ComponentBehavior: Bound
 
-import DisplayToLightPanel
+import QtQuick 2.15
+import QtQuick.Layouts 1.15
+import QtQuick.Window 2.15
+import QtQuick.Controls 2.15
+import QtQuick.Controls.Universal 2.12
+
+import QtQml.Models 2.15
+import Qt.labs.platform 1.1
+import Qt.labs.settings 1.1
+// import QtCore // 6.5
+
+import com.cuperino.lightpanel 1.0
 
 Item {
     id: root
@@ -45,10 +51,11 @@ Item {
             height: 480
             minimumWidth: controls.enabled ? controlsGroupBox.implicitWidth : 64
             minimumHeight: controls.enabled ? controlsGroupBox.implicitHeight : 64
-            title: qsTr("Light Panels <%0> ").arg(screen.name)
+            title: qsTr("Light Panels <%0> ").arg(Screen.name)
             visible: !skip
             color: Qt.hsla(screenModel.hue/360, screenModel.saturation/255, screenModel.lightness/255)
             flags: Qt.WindowFullscreenButtonHint | (windowZ.currentIndex ? (windowZ.currentIndex === 1 ? Qt.WindowStaysOnTopHint : Qt.WindowStaysOnBottomHint) : 0) | (frameless.checked ? Qt.FramelessWindowHint : 0)
+            required property int index
             property bool fullscreen: false
             property bool finishClosing: false
             property bool skip: false
@@ -87,7 +94,7 @@ Item {
                     panels.model.remove(index+1, panels.model.count-index-1);
             }
             function bindToScreen() {
-                const scr = screen.name;
+                const scr = Screen.name;
                 screenSettings.category = scr + "s";
                 screenModel.screenName = scr;
             }
@@ -95,8 +102,8 @@ Item {
                 root.showAbout = false;
                 lightPanel.width = 640;
                 lightPanel.height = 480;
-                lightPanel.x = (screen.width - lightPanel.width) / 2;
-                lightPanel.y = (screen.height - lightPanel.height) / 2;
+                lightPanel.x = (Screen.width - lightPanel.width) / 2;
+                lightPanel.y = (Screen.height - lightPanel.height) / 2;
                 screenModel.hue = 180;
                 screenModel.lightness = 250;
                 screenModel.saturation = 255;
@@ -121,7 +128,7 @@ Item {
             }
             Settings {
                 id: windowSettings
-                category: "n" + index.toString()
+                category: "n" + index
                 property alias wX: lightPanel.x
                 property alias wY: lightPanel.y
                 property alias wW: lightPanel.width
@@ -134,14 +141,14 @@ Item {
                 property alias screenName: screenModel.screenName
                 property alias skip: lightPanel.skip
             }
-            Universal.foreground: screenModel.lightness < 64 ? "#FFF" : "#000"
-            Universal.background: screenModel.lightness < 64 ? Universal.Steel : "#FFF"
-            Universal.accent: screenModel.lightness < 64 ? Universal.Steel : Universal.Cobalt
+            Universal.foreground: screenModel.lightness < 92 ? "#FFF" : "#000"
+            Universal.background: screenModel.lightness < 92 ? Universal.Steel : "#FFF"
+            Universal.accent: screenModel.lightness < 92 ? Universal.Steel : Universal.Cobalt
             ScreenModel {
                 id: screenModel
                 lightness: 250
                 saturation: 255
-                screenName: lightPanel.screen.name
+                screenName: Screen.name
                 NumberAnimation on hue {
                     running: root.showAbout
                     from: hueSlider.to
@@ -168,12 +175,12 @@ Item {
                     }
                 }
             }
-            Labs.MessageDialog {
+            MessageDialog {
                 id: closingDialog
                 title: qsTr("Closing Light Panel")
                 informativeText: qsTr("Would you like to save and quit, close the window, or cancel?")
                 modality: Qt.ApplicationModal
-                buttons: Labs.MessageDialog.Save | Labs.MessageDialog.Close | Labs.MessageDialog.Cancel
+                buttons: MessageDialog.Save | MessageDialog.Close | MessageDialog.Cancel
                 onSaveClicked: {
                     lightPanel.saveAndQuit();
                 }
@@ -288,7 +295,7 @@ Item {
                 Timer {
                     id: clickTimer
                     interval: 200
-                    onTriggered: singleClick()
+                    onTriggered: showHideControls.clicked(null)
                 }
                 Settings {
                     id: screenSettings
@@ -378,7 +385,7 @@ Item {
                         }
                         GroupBox {
                             id: controlsGroupBox
-                            title: root.showAbout ? qsTr("Display to Light Panel, © 2023 Javier Cordero, Licensed GPL-3.0") : qsTr("Panel Settings")
+                            title: root.showAbout ? qsTr("Display to Light Panel, © 2023-2025 Javier Cordero, Licensed GPL-3.0") : qsTr("Panel Settings")
                             anchors {
                                 fill: parent
                                 margins: 5
@@ -522,12 +529,14 @@ Item {
                                         onClicked: panels.addPanel()
                                     }
                                     Button {
-                                        enabled: panels.model.count>1
+                                        enabled: panels.model.count > 1
                                         text: qsTr("Clear")
                                         onClicked: lightPanel.clearAll()
                                     }
                                     ComboBox {
                                         id: windowZ
+                                        // readonly property list<string> stringList: Qt.platform.os==="osx" ? [qsTr("Normal"), qsTr("Always in front")] : [qsTr("Normal"), qsTr("Always in front"), qsTr("Always behind")]
+                                        // model: stringList
                                         model: Qt.platform.os==="osx" ? [qsTr("Normal"), qsTr("Always in front")] : [qsTr("Normal"), qsTr("Always in front"), qsTr("Always behind")]
                                         Layout.fillWidth: true
                                     }
