@@ -105,8 +105,6 @@ Item {
                 root.showAbout = false;
                 lightPanel.width = 640;
                 lightPanel.height = 480;
-                lightPanel.x = (Screen.width - lightPanel.width) / 2;
-                lightPanel.y = (Screen.height - lightPanel.height) / 2;
                 screenModel.hue = 180;
                 screenModel.lightness = 250;
                 screenModel.saturation = 255;
