@@ -385,6 +385,7 @@ Item {
                         }
                         GroupBox {
                             id: controlsGroupBox
+                            enabled: root.ready
                             title: root.showAbout ? qsTr("Display to Light Panel, © 2023-2025 Javier Cordero, Licensed GPL-3.0") : qsTr("Panel Settings")
                             anchors {
                                 fill: parent

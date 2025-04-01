@@ -23,6 +23,7 @@ class ScreenModel : public QObject {
     Q_PROPERTY(int hue READ screenHue WRITE setScreenHue NOTIFY screenHueChanged FINAL)
     Q_PROPERTY(int lightness READ screenLightness WRITE setScreenLightness NOTIFY screenLightnessChanged FINAL)
     Q_PROPERTY(int saturation READ screenSaturation WRITE setScreenSaturation NOTIFY screenSaturationChanged FINAL)
+    Q_PROPERTY(bool ready MEMBER m_ready NOTIFY screenHueChanged FINAL)
 public:
     explicit ScreenModel(QObject* parent = nullptr);
 
@@ -49,9 +50,12 @@ signals:
     void screenLightnessChanged();
     void screenSaturationChanged();
 
+    void readyChanged();
+
 private:
-    void initializeScreenMap();
-    std::shared_ptr<InternalMessageBroker> m_mb;
-    QString m_currentScreen;
     QMap<QString, ColorProperties> m_screens;
+    QString m_currentScreen;
+    bool m_ready;
+    std::shared_ptr<InternalMessageBroker> m_mb;
+    void initializeScreenMap();
 };

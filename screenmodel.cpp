@@ -6,19 +6,24 @@
 
 #include <QGuiApplication>
 #include <QScreen>
+#include <QTimer>
 
 ScreenModel::ScreenModel(QObject* parent)
     : QObject { parent }
 {
-    connect(qGuiApp, &QGuiApplication::screenAdded, this, &ScreenModel::initializeScreenMap);
-
     m_mb = InternalMessageBroker::instance();
-    connect(this, &ScreenModel::spreadHueChange, m_mb.get(), &InternalMessageBroker::hueChanged);
-    connect(m_mb.get(), &InternalMessageBroker::hueChanged, this, &ScreenModel::setScreenHue);
-    connect(this, &ScreenModel::spreadLightnessChange, m_mb.get(), &InternalMessageBroker::lightnessChanged);
-    connect(m_mb.get(), &InternalMessageBroker::lightnessChanged, this, &ScreenModel::setScreenLightness);
-    connect(this, &ScreenModel::spreadSaturationChange, m_mb.get(), &InternalMessageBroker::saturationChanged);
-    connect(m_mb.get(), &InternalMessageBroker::saturationChanged, this, &ScreenModel::setScreenSaturation);
+    QTimer::singleShot(0, this, [this] () {
+        connect(qGuiApp, &QGuiApplication::screenAdded, this, &ScreenModel::initializeScreenMap);
+        connect(this, &ScreenModel::spreadHueChange, m_mb.get(), &InternalMessageBroker::hueChanged);
+        connect(m_mb.get(), &InternalMessageBroker::hueChanged, this, &ScreenModel::setScreenHue);
+        connect(this, &ScreenModel::spreadLightnessChange, m_mb.get(), &InternalMessageBroker::lightnessChanged);
+        connect(m_mb.get(), &InternalMessageBroker::lightnessChanged, this, &ScreenModel::setScreenLightness);
+        connect(this, &ScreenModel::spreadSaturationChange, m_mb.get(), &InternalMessageBroker::saturationChanged);
+        connect(m_mb.get(), &InternalMessageBroker::saturationChanged, this, &ScreenModel::setScreenSaturation);
+        initializeScreenMap();
+        m_ready = true;
+        emit readyChanged();
+    });
 }
 
 QString ScreenModel::currentScreen()
