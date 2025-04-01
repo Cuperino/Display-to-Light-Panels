@@ -51,7 +51,7 @@ Item {
             height: 480
             minimumWidth: controls.enabled ? controlsGroupBox.implicitWidth : 64
             minimumHeight: controls.enabled ? controlsGroupBox.implicitHeight : 64
-            title: qsTr("Light Panels <%0> ").arg(Screen.name)
+            title: qsTr("Light Panels <%0> ").arg(lightPanel.screen.name)
             visible: !skip
             color: Qt.hsla(screenModel.hue/360, screenModel.saturation/255, screenModel.lightness/255)
             flags: Qt.WindowFullscreenButtonHint | (windowZ.currentIndex ? (windowZ.currentIndex === 1 ? Qt.WindowStaysOnTopHint : Qt.WindowStaysOnBottomHint) : 0) | (frameless.checked ? Qt.FramelessWindowHint : 0)
@@ -94,9 +94,9 @@ Item {
                     panels.model.remove(index+1, panels.model.count-index-1);
             }
             function bindToScreen() {
-                const scr = Screen.name;
-                screenSettings.category = scr + "s";
-                screenModel.screenName = scr;
+                const screen = lightPanel.screen.name;
+                screenSettings.category = screen + "s";
+                screenModel.screenName = screen;
             }
             function reset() {
                 root.showAbout = false;
@@ -148,7 +148,7 @@ Item {
                 id: screenModel
                 lightness: 250
                 saturation: 255
-                screenName: Screen.name
+                screenName: lightPanel.screen.name
                 NumberAnimation on hue {
                     running: root.showAbout
                     from: hueSlider.to
