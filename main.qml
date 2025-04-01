@@ -158,23 +158,15 @@ Item {
                     to: hueSlider.from
                     loops: 3
                     duration: 3600
-                    property int tHue: 0
-                    property int tLight: 0
-                    property int tSat: 0
+                    property int tHue: screenModel.hue
                     onStarted: {
                         tHue = screenModel.hue;
-                        tLight = screenModel.lightness;
-                        tSat = screenModel.saturation;
-                        screenModel.lightness = 248;
-                        screenModel.saturation = 255;
                         hueSlider.enabled = false;
                     }
                     onStopped: {
                         root.showAbout = false;
                         hueSlider.enabled = true;
                         screenModel.hue = tHue;
-                        screenModel.lightness = tLight;
-                        screenModel.saturation = tSat;
                     }
                 }
             }
