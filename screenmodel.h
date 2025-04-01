@@ -19,17 +19,17 @@ class ScreenModel : public QObject {
     Q_OBJECT
     QML_ELEMENT
 
-    Q_PROPERTY(const QString &screenName READ getCurrentScreen WRITE setCurrentScreen NOTIFY currentScreenChanged)
-    Q_PROPERTY(int hue READ getScreenHue WRITE setScreenHue NOTIFY screenHueChanged)
-    Q_PROPERTY(int lightness READ getScreenLightness WRITE setScreenLightness NOTIFY screenLightnessChanged)
-    Q_PROPERTY(int saturation READ getScreenSaturation WRITE setScreenSaturation NOTIFY screenSaturationChanged)
+    Q_PROPERTY(const QString &screenName READ currentScreen WRITE setCurrentScreen NOTIFY currentScreenChanged FINAL)
+    Q_PROPERTY(int hue READ screenHue WRITE setScreenHue NOTIFY screenHueChanged FINAL)
+    Q_PROPERTY(int lightness READ screenLightness WRITE setScreenLightness NOTIFY screenLightnessChanged FINAL)
+    Q_PROPERTY(int saturation READ screenSaturation WRITE setScreenSaturation NOTIFY screenSaturationChanged FINAL)
 public:
     explicit ScreenModel(QObject* parent = nullptr);
 
-    QString getCurrentScreen();
-    int getScreenHue();
-    int getScreenLightness();
-    int getScreenSaturation();
+    QString currentScreen();
+    int screenHue();
+    int screenLightness();
+    int screenSaturation();
 
     void setCurrentScreen(const QString &screenName);
     void setScreenHue(const int hue, const bool spread=true, const QString &screenName="s");

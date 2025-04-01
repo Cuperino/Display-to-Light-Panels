@@ -21,7 +21,7 @@ ScreenModel::ScreenModel(QObject* parent)
     connect(m_mb.get(), &InternalMessageBroker::saturationChanged, this, &ScreenModel::setScreenSaturation);
 }
 
-QString ScreenModel::getCurrentScreen()
+QString ScreenModel::currentScreen()
 {
     return m_currentScreen;
 }
@@ -47,17 +47,17 @@ void ScreenModel::initializeScreenMap()
     }
 }
 
-int ScreenModel::getScreenHue()
+int ScreenModel::screenHue()
 {
     return m_screens[m_currentScreen].hue;
 }
 
-int ScreenModel::getScreenLightness()
+int ScreenModel::screenLightness()
 {
     return m_screens[m_currentScreen].lightness;
 }
 
-int ScreenModel::getScreenSaturation()
+int ScreenModel::screenSaturation()
 {
     return m_screens[m_currentScreen].saturation;
 }
