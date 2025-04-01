@@ -18,6 +18,9 @@ import com.cuperino.lightpanel 1.0
 
 Item {
     id: root
+    readonly property string version: "1.0"
+    readonly property string copyrightYear: "2025"
+    readonly property string author: "Javier Cordero"
     property bool showAbout: false
     property int panelCount: 1
     Settings {
@@ -51,7 +54,7 @@ Item {
             height: 480
             minimumWidth: controls.enabled ? controlsGroupBox.implicitWidth : 64
             minimumHeight: controls.enabled ? controlsGroupBox.implicitHeight : 64
-            title: qsTr("Light Panels <%0> ").arg(lightPanel.screen.name)
+            title: qsTr("Light Panel <%0> ").arg(lightPanel.screen.name)
             visible: !skip
             color: Qt.hsla(screenModel.hue/360, screenModel.saturation/255, screenModel.lightness/255)
             flags: Qt.WindowFullscreenButtonHint | (windowZ.currentIndex ? (windowZ.currentIndex === 1 ? Qt.WindowStaysOnTopHint : Qt.WindowStaysOnBottomHint) : 0) | (frameless.checked ? Qt.FramelessWindowHint : 0)
@@ -386,7 +389,7 @@ Item {
                         GroupBox {
                             id: controlsGroupBox
                             enabled: root.ready
-                            title: root.showAbout ? qsTr("Display to Light Panel, © 2023-2025 Javier Cordero, Licensed GPL-3.0") : qsTr("Panel Settings")
+                            title: root.showAbout ? qsTr("Display to Light Panel, %1, © %2 %3, Licensed GPL-3.0").arg(root.version).arg(root.copyrightYear).arg(root.author) : qsTr("Panel Settings")
                             anchors {
                                 fill: parent
                                 margins: 5

@@ -3,10 +3,10 @@
 
 cmake_minimum_required(VERSION 3.22)
 
-project(DisplayToLightPanels
-    VERSION 0.2.0
-    DESCRIPTION "Convert monitors into light panels"
-    HOMEPAGE_URL "https://cuperino.com/lightpanels"
+project(DisplayToLightPanel
+    VERSION 1.0.0
+    DESCRIPTION "Convert computer displays into light panels"
+    HOMEPAGE_URL "https://lightpanel.cuperino.com/"
     LANGUAGES CXX)
 
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
