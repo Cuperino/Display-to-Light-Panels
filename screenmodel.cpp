@@ -33,7 +33,11 @@ QString ScreenModel::currentScreen()
 
 void ScreenModel::initializeScreenMap()
 {
+#if (defined(Q_OS_MACOS))
+    QSettings settings(QCoreApplication::organizationDomain(), QCoreApplication::applicationName());
+#else
     QSettings settings(QCoreApplication::organizationName(), QCoreApplication::applicationName());
+#endif
     const auto screens = QGuiApplication::screens();
     for (QScreen* screen : screens) {
         QString screenName = screen->name();
