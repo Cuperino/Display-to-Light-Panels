@@ -397,9 +397,8 @@ Item {
                                         value: screenModel.hue
                                         to: 360
                                         Layout.fillWidth: true
-                                        onValueChanged: {
-                                            if (pressed)
-                                                screenModel.hue = value;
+                                        onMoved: {
+                                            screenModel.hue = value;
                                         }
                                     }
                                     SpinBox {
@@ -407,9 +406,8 @@ Item {
                                         value: screenModel.hue
                                         editable: true
                                         to: 360
-                                        onValueChanged: {
-                                            if (down.pressed || up.pressed)
-                                                screenModel.hue = value;
+                                        onValueModified: {
+                                            screenModel.hue = value;
                                         }
                                     }
                                 }
@@ -423,9 +421,8 @@ Item {
                                         value: screenModel.lightness
                                         to: 255
                                         Layout.fillWidth: true
-                                        onValueChanged: {
-                                            if (pressed)
-                                                screenModel.lightness = value;
+                                        onMoved: {
+                                            screenModel.lightness = value;
                                         }
                                     }
                                     SpinBox {
@@ -433,9 +430,8 @@ Item {
                                         value: screenModel.lightness
                                         editable: true
                                         to: 255
-                                        onValueChanged: {
-                                            if (down.pressed || up.pressed)
-                                                screenModel.lightness = value;
+                                        onValueModified: {
+                                            screenModel.lightness = value;
                                         }
                                     }
                                 }
@@ -449,9 +445,8 @@ Item {
                                         value: screenModel.saturation
                                         to: 255
                                         Layout.fillWidth: true
-                                        onValueChanged: {
-                                            if (pressed)
-                                                screenModel.saturation = value;
+                                        onMoved: {
+                                            screenModel.saturation = value;
                                         }
                                     }
                                     SpinBox {
@@ -459,9 +454,8 @@ Item {
                                         value: screenModel.saturation
                                         editable: true
                                         to: 255
-                                        onValueChanged: {
-                                            if (down.pressed || up.pressed)
-                                                screenModel.saturation = value;
+                                        onValueModified: {
+                                            screenModel.saturation = value;
                                         }
                                     }
                                 }
