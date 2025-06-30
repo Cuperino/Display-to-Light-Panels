@@ -11,8 +11,8 @@ import QtQuick.Controls.Universal 2.12
 
 import QtQml.Models 2.15
 import Qt.labs.platform 1.1
-import Qt.labs.settings 1.1
-// import QtCore // 6.5
+// import Qt.labs.settings 1.1
+import QtCore // 6.5
 
 import com.cuperino.lightpanel 1.0
 
