@@ -56,6 +56,7 @@ Item {
             minimumHeight: controls.enabled ? controlsGroupBox.implicitHeight : 64
             title: qsTr("Light Panel <%0> ").arg(lightPanel.screen.name)
             visible: !skip
+            visibility: Window.Windowed
             color: Qt.hsla(screenModel.hue/360, screenModel.saturation/255, screenModel.lightness/255)
             flags: Qt.WindowFullscreenButtonHint | (windowZ.currentIndex ? (windowZ.currentIndex === 1 ? Qt.WindowStaysOnTopHint : Qt.WindowStaysOnBottomHint) : 0) | (frameless.checked ? Qt.FramelessWindowHint : 0)
             required property int index
@@ -134,6 +135,7 @@ Item {
                 property alias wY: lightPanel.y
                 property alias wW: lightPanel.width
                 property alias wH: lightPanel.height
+                property alias visibility: lightPanel.visibility
                 property alias fullscreen: fullScreen.checked
                 property alias frameless: frameless.checked
                 property alias z: windowZ.currentIndex
