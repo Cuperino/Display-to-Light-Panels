@@ -1,4 +1,4 @@
-// Copyright (C) 2023-2025 Javier O. Cordero Pérez
+// Copyright (C) 2023-2026 Javier O. Cordero Pérez
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 // pragma ComponentBehavior: Bound
@@ -19,7 +19,7 @@ import com.cuperino.lightpanel 1.0
 Item {
     id: root
     readonly property string version: "1.0"
-    readonly property string copyrightYear: "2025"
+    readonly property string copyrightYear: "2026"
     readonly property string author: "Javier Cordero"
     property bool showAbout: false
     property int panelCount: 1

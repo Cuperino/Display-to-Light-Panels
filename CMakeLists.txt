@@ -1,4 +1,4 @@
-# Copyright (C) 2023-2025 Javier O. Cordero Pérez
+# Copyright (C) 2023-2026 Javier O. Cordero Pérez
 # SPDX-License-Identifier: GPL-3.0-or-later
 
 cmake_minimum_required(VERSION 3.22)
